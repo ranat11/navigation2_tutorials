@@ -155,7 +155,7 @@
     <sensor name="imu_sensor" type="imu">
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
         <ros>
-          <namespace>/demo</namespace>
+          <!-- <namespace>/demo</namespace> -->
           <remapping>~/out:=imu</remapping>
         </ros>
         <initial_orientation_as_reference>false</initial_orientation_as_reference>
@@ -222,9 +222,10 @@
 
   <gazebo>
     <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
-      <!-- <ros>
-        <namespace>/demo</namespace>
-      </ros> -->
+      <ros>
+        <!-- <namespace>/demo</namespace> -->
+      </ros>
+      <command_topic>cmd_vel</command_topic>
 
       <!-- wheels -->
       <left_joint>drivewhl_l_joint</left_joint>
@@ -301,8 +302,10 @@
           <stddev>0.01</stddev>
         </noise>
       </ray>
+
       <plugin name="scan" filename="libgazebo_ros_ray_sensor.so">
         <ros>
+          <!-- <namespace>/demo</namespace> -->
           <remapping>~/out:=scan</remapping>
         </ros>
         <output_type>sensor_msgs/LaserScan</output_type>
