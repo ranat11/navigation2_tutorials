@@ -219,12 +219,12 @@
       </imu>
     </sensor>
   </gazebo>
- 
+
   <gazebo>
     <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
-      <ros>
+      <!-- <ros>
         <namespace>/demo</namespace>
-      </ros>
+      </ros> -->
 
       <!-- wheels -->
       <left_joint>drivewhl_l_joint</left_joint>
@@ -247,7 +247,7 @@
       <robot_base_frame>base_link</robot_base_frame>
     </plugin>
   </gazebo>
-
+ 
  <link name="lidar_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>

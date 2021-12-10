@@ -7,7 +7,7 @@ def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package='sam_bot_description').find('sam_bot_description')
     default_model_path = os.path.join(pkg_share, 'src/description/sam_bot_description.urdf')
     default_rviz_config_path = os.path.join(pkg_share, 'rviz/urdf_config.rviz')
-    world_path=os.path.join(pkg_share, 'world/my_world.sdf')
+    default_world_path = os.path.join(pkg_share, 'world/my_world.sdf')
     
     robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
@@ -26,6 +26,7 @@ def generate_launch_description():
         name='rviz2',
         output='screen',
         arguments=['-d', LaunchConfiguration('rvizconfig')],
+        parameters= [{'use_sim_time': LaunchConfiguration('use_sim_time')}]
     )
     spawn_entity = launch_ros.actions.Node(
     	package='gazebo_ros', 
@@ -46,11 +47,13 @@ def generate_launch_description():
                                             description='Flag to enable joint_state_publisher_gui'),
         launch.actions.DeclareLaunchArgument(name='model', default_value=default_model_path,
                                             description='Absolute path to robot urdf file'),
+        launch.actions.DeclareLaunchArgument(name='world', default_value=default_world_path,
+                                            description='Absolute path to robot world file'),
         launch.actions.DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
                                             description='Absolute path to rviz config file'),
         launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                             description='Flag to enable use_sim_time'),
-        launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so', world_path], output='screen'),
+        launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so', LaunchConfiguration('world')], output='screen'),
 
         joint_state_publisher_node,
         robot_state_publisher_node,
@@ -58,3 +61,6 @@ def generate_launch_description():
         robot_localization_node,
         rviz_node
     ])
+
+# Test moving
+# ros2 topic pub --once /demo/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"
